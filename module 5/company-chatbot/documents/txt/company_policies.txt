@@ -1,0 +1,5 @@
+Company Policy Document
+
+1. All employees must adhere to the Code of Conduct.
+2. Working hours are 9am-5pm Monday through Friday.
+3. Report any security incidents to the IT department immediately.
