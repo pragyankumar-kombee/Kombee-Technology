@@ -1,7 +1,0 @@
-pandas
-torch
-transformers
-scikit-learn
-tqdm
-huggingface-hub
-flask
