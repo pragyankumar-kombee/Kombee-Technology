@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}LiquidAI - Interface{% endblock %}
+
+{% block content %}
+<div class="row animate__animated animate__fadeIn">
+    <div class="col-lg-3 d-none d-lg-block">
+        <div class="card bg-transparent border-0 mb-4 h-100">
+            <div class="card-body container-main p-4"
+                style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--surface-border); border-radius: 16px; backdrop-filter: blur(10px);">
+                <h6 class="text-light mb-4 text-uppercase fw-semibold" style="letter-spacing: 1px;"><i
+                        class="fas fa-microchip me-2"></i> SYSTEM METRICS</h6>
+
+                <div class="mb-4">
+                    <small class="text-light d-block mb-1">WebGPU Context Compute</small>
+                    <div class="progress" style="height: 4px; background: rgba(255,255,255,0.05);">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                            style="width: 100%; background: var(--primary);"></div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <small class="text-light d-block mb-1">Model State</small>
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-circle text-success" style="font-size: 0.5rem;"></i>
+                        <span class="text-light" style="font-size: 0.9rem;">LFM 2.5 Active</span>
+                    </div>
+                </div>
+
+                <hr style="border-color: rgba(255,255,255,0.05);">
+
+                <div class="mt-4">
+                    <small class="text-light d-block mb-2 text-uppercase" style="font-size: 0.8rem;">QUICK
+                        INJECTIONS</small>
+                    <div class="d-grid gap-2 mt-3">
+                        <button class="btn btn-sm text-start"
+                            style="background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(56, 189, 248, 0.1)';this.style.color='#fff';"
+                            onmouseout="this.style.background='rgba(255,255,255,0.03)';this.style.color='var(--text-muted)';"
+                            onclick="quickMessage('Generate a concise summary of WebGPU architecture.')">
+                            <i class="fas fa-bolt me-2 text-primary"></i> Explain WebGPU
+                        </button>
+                        <button class="btn btn-sm text-start"
+                            style="background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(56, 189, 248, 0.1)';this.style.color='#fff';"
+                            onmouseout="this.style.background='rgba(255,255,255,0.03)';this.style.color='var(--text-muted)';"
+                            onclick="quickMessage('Write a python script to implement a basic neural network.')">
+                            <i class="fas fa-code me-2 text-primary"></i> Code Generation
+                        </button>
+                        <button class="btn btn-sm text-start"
+                            style="background: rgba(255,255,255,0.03); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.2s;"
+                            onmouseover="this.style.background='rgba(56, 189, 248, 0.1)';this.style.color='#fff';"
+                            onmouseout="this.style.background='rgba(255,255,255,0.03)';this.style.color='var(--text-muted)';"
+                            onclick="quickMessage('Search for the latest breakthroughs in liquid neural networks.')">
+                            <i class="fas fa-search me-2 text-primary"></i> Web Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="container-main p-0 overflow-hidden d-flex flex-column h-100"
+            style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--surface-border); border-radius: 16px; backdrop-filter: blur(10px);">
+            <div class="card-header p-3 d-flex justify-content-between align-items-center"
+                style="border-bottom: 1px solid var(--surface-border);">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="liquid-icon" style="width: 16px; height: 16px;"></div>
+                    <span class="fw-semibold text-white">Liquid Interface</span>
+                </div>
+                <div class="btn-group gap-2">
+                    <button class="btn btn-sm text-muted hover-white border-0" onclick="exportChat()"
+                        title="Export Thread" style="background: rgba(255,255,255,0.05); border-radius: 6px;">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="btn btn-sm text-muted hover-white border-0" onclick="clearChat()"
+                        title="Clear Context" style="background: rgba(255,255,255,0.05); border-radius: 6px;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="btn btn-sm text-muted hover-white border-0" onclick="toggleVoice()"
+                        title="Voice Input" id="voice-btn"
+                        style="background: rgba(255,255,255,0.05); border-radius: 6px;">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body p-0 d-flex flex-column" style="height: 600px;">
+                <div id="chat-container" class="flex-grow-1" style="overflow-y: auto; padding: 24px;">
+                    <div class="text-center py-5 mt-5 animate__animated animate__fadeIn">
+                        <div class="liquid-icon-large mx-auto mb-4"
+                            style="width: 48px; height: 48px; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; background: linear-gradient(135deg, #38bdf8, #818cf8); animation: morph 3s ease-in-out infinite both alternate;">
+                        </div>
+                        <h5 class="text-white fw-semibold mb-2">Liquid LFM 2.5</h5>
+                        <p class="text-white" style="font-size: 0.9rem;">How can I assist you today?</p>
+                    </div>
+                </div>
+
+                <div class="p-4" style="border-top: 1px solid var(--surface-border); background: rgba(2, 6, 23, 0.4);">
+                    <div id="loading" class="text-left mb-2 ms-2" style="display: none;">
+                        <span class="text-muted" style="font-size: 0.85rem;">
+                            <i class="fas fa-circle-notch fa-spin me-2 text-primary"></i> Liquid AI is thinking...
+                        </span>
+                    </div>
+
+                    <div id="search-indicator" class="text-left mb-2 ms-2" style="display: none;">
+                        <span class="text-muted" style="font-size: 0.85rem;">
+                            <i class="fas fa-search me-2 text-primary"></i> Searching the web...
+                        </span>
+                    </div>
+
+                    <div class="input-container position-relative">
+                        <textarea id="user-input" class="form-control text-light" placeholder="Type a message..."
+                            rows="1"
+                            style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 50px 14px 16px; resize: none; overflow: hidden; font-size: 0.95rem; box-shadow: none;"></textarea>
+                        <button class="btn position-absolute" id="send-btn" onclick="sendMessage()"
+                            style="right: 8px; bottom: 8px; background: var(--primary); color: #000; border-radius: 8px; padding: 6px 12px; font-weight: 600; transition: all 0.2s;">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-white:hover {
+        color: #fff !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    #user-input:focus {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(56, 189, 248, 0.4);
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.1);
+    }
+
+    .msg-user {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px 12px 2px 12px;
+    }
+
+    .msg-ai {
+        background: transparent;
+        border-radius: 12px 12px 12px 2px;
+    }
+
+    .ai-content pre {
+        background: #000 !important;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const loading = document.getElementById('loading');
+    const searchIndicator = document.getElementById('search-indicator');
+    let messageCount = 0;
+
+    // Auto-resize textarea
+    userInput.addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+        if (this.value === '') { this.style.height = 'auto'; }
+    });
+
+    // Allow Enter key to send message (Shift+Enter for newline)
+    userInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    function quickMessage(message) {
+        userInput.value = message;
+        sendMessage();
+    }
+
+    function sendMessage() {
+        const message = userInput.value.trim();
+
+        if (!message) {
+            return;
+        }
+
+        if (messageCount === 0) {
+            chatContainer.innerHTML = '';
+        }
+        messageCount++;
+
+        addMessage('user', message);
+
+        userInput.value = '';
+        userInput.style.height = 'auto';
+
+        userInput.disabled = true;
+        sendBtn.disabled = true;
+        loading.style.display = 'block';
+
+        if (message.toLowerCase().includes('what is') || message.toLowerCase().includes('news') || message.toLowerCase().includes('latest') || message.toLowerCase().includes('today') || message.toLowerCase().includes('search')) {
+            searchIndicator.style.display = 'block';
+        }
+
+        fetch('/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message })
+        })
+            .then(response => response.json())
+            .then(data => {
+                searchIndicator.style.display = 'none';
+                if (data.error) {
+                    addMessage('error', data.error);
+                } else {
+                    addMessage('assistant', data.response, data.used_search);
+                }
+            })
+            .catch(error => {
+                searchIndicator.style.display = 'none';
+                addMessage('error', 'Connection lost. Please try again.');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                userInput.disabled = false;
+                sendBtn.disabled = false;
+                loading.style.display = 'none';
+                userInput.focus();
+            });
+    }
+
+    function addMessage(type, text, usedSearch = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'mb-4 animate__animated animate__fadeInUp animate__faster';
+
+        if (type === 'user') {
+            messageDiv.innerHTML = `
+            <div class="d-flex justify-content-end">
+                <div class="p-3 msg-user shadow-sm" style="max-width: 75%;">
+                    <div class="text-light" style="font-size: 0.95rem;">${escapeHtml(text).replace(/\n/g, '<br>')}</div>
+                </div>
+            </div>
+        `;
+        } else if (type === 'assistant') {
+            const searchBadge = usedSearch ? '<span class="ms-2 text-muted" style="font-size:0.7rem;"><i class="fas fa-search me-1"></i>Web Context</span>' : '';
+            messageDiv.innerHTML = `
+            <div class="d-flex justify-content-start">
+                <div class="me-3 mt-1">
+                    <div class="liquid-icon" style="width: 28px; height: 28px;"></div>
+                </div>
+                <div class="msg-ai" style="max-width: 85%;">
+                    <div class="d-flex align-items-center mb-1">
+                        <strong class="text-white" style="font-size: 0.95rem;">LiquidAI</strong>
+                        ${searchBadge}
+                    </div>
+                    <div class="text-light ai-content" style="font-size: 0.95rem; line-height: 1.6; color: #cbd5e1 !important;">${formatMessage(text)}</div>
+                </div>
+            </div>
+        `;
+        } else if (type === 'error') {
+            messageDiv.innerHTML = `
+            <div class="d-flex justify-content-center">
+                <div class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 fw-normal">
+                    ${escapeHtml(text)}
+                </div>
+            </div>
+        `;
+        }
+
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function formatMessage(text) {
+        text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: var(--primary); text-decoration: none;">$1</a>');
+        text = text.replace(/\`\`\`([\s\S]*?)\`\`\`/g, function (match, code) {
+            return `<pre><code style="color: #a78bfa;">${escapeHtml(code.trim())}</code></pre>`;
+        });
+        text = text.replace(/\`([^\`]+)\`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; color: #a78bfa;">$1</code>');
+        text = text.replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>');
+        text = text.replace(/\n/g, '<br>');
+        return text;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function clearChat() {
+        chatContainer.innerHTML = `
+        <div class="text-center py-5 mt-5 animate__animated animate__fadeIn">
+            <div class="liquid-icon-large mx-auto mb-4" style="width: 48px; height: 48px; border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; background: linear-gradient(135deg, #38bdf8, #818cf8); animation: morph 3s ease-in-out infinite both alternate;"></div>
+            <h5 class="text-white fw-semibold mb-2">Context Cleared</h5>
+            <p class="text-muted" style="font-size: 0.9rem;">Ready for a new session.</p>
+        </div>
+    `;
+        messageCount = 0;
+    }
+
+    function exportChat() {
+        const messages = chatContainer.innerText;
+        const blob = new Blob([messages], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `liquid_session_${new Date().getTime()}.txt`;
+        a.click();
+    }
+
+    function toggleVoice() {
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+
+            recognition.onresult = function (event) {
+                userInput.value = event.results[0][0].transcript;
+                document.getElementById('voice-btn').innerHTML = '<i class="fas fa-microphone"></i>';
+            };
+
+            recognition.onerror = function () {
+                document.getElementById('voice-btn').innerHTML = '<i class="fas fa-microphone"></i>';
+            };
+
+            recognition.onend = function () {
+                document.getElementById('voice-btn').innerHTML = '<i class="fas fa-microphone"></i>';
+                if (userInput.value) { sendMessage(); }
+            };
+
+            document.getElementById('voice-btn').innerHTML = '<i class="fas fa-circle text-danger blink"></i>';
+            recognition.start();
+        } else {
+            alert('Voice protocol not supported.');
+        }
+    }
+
+    window.onload = function () {
+        userInput.focus();
+    };
+</script>
+{% endblock %}

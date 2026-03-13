@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Personal AI Assistant - Spatial Core{% endblock %}
+
+{% block content %}
+<div class="splash-screen" onclick="window.location.href='/chat'" title="Initialize Spatial Core">
+    <!-- Ambient Particles instead of Water -->
+    <div class="ar-particles">
+        <div class="particle p1"></div>
+        <div class="particle p2"></div>
+        <div class="particle p3"></div>
+        <div class="particle p4"></div>
+    </div>
+    
+    <div class="splash-content text-center spatial-panel p-5">
+        <div class="ar-icon-large mx-auto mb-4">
+            <i class="fas fa-vr-cardboard text-white" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));"></i>
+        </div>
+        <h1 class="display-3 fw-bold mb-3 ar-text">Personal AI Assistant</h1>
+        <h4 class="fw-light text-muted mb-4" style="letter-spacing: 2px;">SPATIAL COMPUTING CORE</h4>
+        <div class="d-flex justify-content-center gap-3 mb-5">
+            <span class="badge rounded-pill bg-white bg-opacity-10 text-white px-3 py-2 fw-normal" style="border: 1px solid rgba(255,255,255,0.2);"><i class="fas fa-bolt text-warning me-2"></i>Neural Net Active</span>
+            <span class="badge rounded-pill bg-white bg-opacity-10 text-white px-3 py-2 fw-normal" style="border: 1px solid rgba(255,255,255,0.2);"><i class="fas fa-eye text-info me-2"></i>AR Overlay Ready</span>
+        </div>
+        <p class="click-to-enter mt-3 animate__animated animate__pulse animate__infinite">
+            Tap anywhere to initialize workspace <i class="fas fa-expand ms-2"></i>
+        </p>
+    </div>
+</div>
+
+<style>
+/* Full screen spatial splash */
+body { margin: 0; padding: 0; overflow: hidden; }
+
+.splash-screen {
+    position: absolute;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    background: transparent;
+    perspective: 1200px; /* Enhanced 3D depth */
+}
+
+.splash-content {
+    z-index: 100;
+    pointer-events: none;
+    animation: float-spatial 8s ease-in-out infinite;
+    transform-style: preserve-3d;
+    max-width: 800px;
+    width: 90%;
+}
+
+@keyframes float-spatial {
+    0% { transform: translateY(0px) rotateX(2deg) rotateY(-2deg); }
+    50% { transform: translateY(-15px) rotateX(-2deg) rotateY(2deg); }
+    100% { transform: translateY(0px) rotateX(2deg) rotateY(-2deg); }
+}
+
+.ar-icon-large {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 24px;
+    box-shadow: 0 0 30px rgba(255,255,255,0.1) inset,
+                0 15px 35px rgba(0,0,0,0.2);
+    backdrop-filter: blur(20px);
+    transform: translateZ(30px); /* Pop out effect */
+}
+
+.ar-text {
+    background: linear-gradient(to right, #ffffff, #e0e5ff, #a0c8ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1.5px;
+    text-shadow: 0 10px 30px rgba(160, 200, 255, 0.2);
+    transform: translateZ(40px); /* Pop out effect */
+}
+
+.click-to-enter {
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    transform: translateZ(20px);
+}
+
+/* Ambient Floating Particles */
+.ar-particles {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.particle {
+    position: absolute;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    animation: drift linear infinite;
+}
+
+.p1 { width: 15px; height: 15px; top: 20%; left: 10%; animation-duration: 25s; opacity: 0.4; }
+.p2 { width: 25px; height: 25px; top: 70%; left: 80%; animation-duration: 35s; opacity: 0.3; }
+.p3 { width: 10px; height: 10px; top: 40%; left: 60%; animation-duration: 20s; opacity: 0.5; }
+.p4 { width: 30px; height: 30px; top: 80%; left: 20%; animation-duration: 40s; opacity: 0.2; }
+
+@keyframes drift {
+    0% { transform: translateY(0) translateX(0) scale(1); }
+    50% { transform: translateY(-100px) translateX(50px) scale(1.5); }
+    100% { transform: translateY(-200px) translateX(-20px) scale(1); opacity: 0;}
+}
+</style>
+{% endblock %}

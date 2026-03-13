@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Personal AI Assistant{% endblock %}</title>
+    <!-- Spatial Computing / AR Native Aesthetic -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ar-bg: #8c92a6; /* Ambient environmental color */
+            --glass-panel: rgba(255, 255, 255, 0.15);
+            --glass-panel-dark: rgba(20, 20, 25, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --primary-accent: #e0e5ff;
+        }
+
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Simulating an ambient physical environment */
+            background: radial-gradient(circle at 50% 0%, #4f5b70 0%, #15161e 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            perspective: 1000px; /* For 3D spatial depth */
+        }
+
+        /* Environmental ambient lights / Mesh gradient feel */
+        .ambient-light-1 {
+            position: fixed;
+            top: -20%; left: -10%;
+            width: 70vw; height: 70vw;
+            background: radial-gradient(circle, rgba(160, 200, 255, 0.15) 0%, transparent 60%);
+            filter: blur(90px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ambient-light-2 {
+            position: fixed;
+            bottom: -20%; right: -10%;
+            width: 80vw; height: 80vw;
+            background: radial-gradient(circle, rgba(200, 160, 255, 0.1) 0%, transparent 60%);
+            filter: blur(100px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Spatial Navigation Bar */
+        .navbar-spatial {
+            background: var(--glass-panel-dark) !important;
+            backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 0;
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: var(--text-main) !important;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.15rem;
+        }
+
+        .ar-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255,255,255,0.1) inset;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-link {
+            color: var(--text-muted) !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            margin: 0 10px;
+            padding: 6px 14px !important;
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .nav-link:hover {
+            color: var(--text-main) !important;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateZ(5px);
+        }
+
+        .container-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        /* Global spatial panel class */
+        .spatial-panel {
+            background: var(--glass-panel-dark);
+            backdrop-filter: blur(40px) saturate(150%);
+            -webkit-backdrop-filter: blur(40px) saturate(150%);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Beautiful scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="ambient-light-1"></div>
+    <div class="ambient-light-2"></div>
+
+    {% if request.path != '/' %}
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-spatial animate__animated animate__fadeInDown">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <div class="ar-icon"><i class="fas fa-layer-group text-white" style="font-size: 0.9rem;"></i></div> 
+                Personal AI Assistant
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link {% if request.path == '/chat' %}active bg-white bg-opacity-10 text-white{% endif %}" href="/chat">Workspace</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.path == '/history' %}active bg-white bg-opacity-10 text-white{% endif %}" href="/history">Archives</a></li>
+                    <li class="nav-item"><a class="nav-link {% if request.path == '/settings' %}active bg-white bg-opacity-10 text-white{% endif %}" href="/settings">Preferences</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="container-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

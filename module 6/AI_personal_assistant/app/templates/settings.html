@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Config - NEXUS AI Engine{% endblock %}
+
+{% block content %}
+<div class="container-main animate__animated animate__zoomIn">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4 text-info" style="font-family: 'Space Grotesk', sans-serif;">
+                <i class="fas fa-sliders-h"></i> SYSTEM CONFIGURATION
+            </h2>
+            
+            <div class="card mb-4 border-0 shadow-sm" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(0,240,255,0.2) !important;">
+                <div class="card-header border-bottom text-light" style="background: rgba(0,240,255,0.05); border-color: rgba(0,240,255,0.2) !important;">
+                    <h5 class="mb-0" style="font-family: 'Space Grotesk', sans-serif;"><i class="fas fa-eye text-info"></i> VISUAL INTERFACE</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label text-light">Color Matrix</label>
+                        <select class="form-select bg-dark text-light border-info" id="theme-select">
+                            <option value="dark">Cyber Dark</option>
+                            <option value="light">Auto Mode</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-light">UI Scaling</label>
+                        <input type="range" class="form-range" min="12" max="20" value="16" id="font-size">
+                        <small class="text-info">Scale Factor: <span id="font-size-value">16</span>px</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow-sm" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,0,234,0.2) !important;">
+                <div class="card-header border-bottom text-light" style="background: rgba(255,0,234,0.05); border-color: rgba(255,0,234,0.2) !important;">
+                    <h5 class="mb-0" style="font-family: 'Space Grotesk', sans-serif;"><i class="fas fa-network-wired text-danger"></i> NEURAL NET PARAMS</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label text-light">Compute Depth</label>
+                        <select class="form-select bg-dark text-light border-danger" id="response-length">
+                            <option value="short">Low (Rapid Inferences)</option>
+                            <option value="medium" selected>Optimal (Balanced)</option>
+                            <option value="long">Deep (Extended Synthesis)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check form-switch custom-switch">
+                        <input class="form-check-input" type="checkbox" id="web-search" checked style="cursor: pointer;">
+                        <label class="form-check-label text-light" for="web-search">
+                            Initialize HyperWeb Data Synchronization
+                        </label>
+                    </div>
+                    <div class="mb-3 form-check form-switch custom-switch">
+                        <input class="form-check-input" type="checkbox" id="auto-save" checked style="cursor: pointer;">
+                        <label class="form-check-label text-light" for="auto-save">
+                            Continuous Core Memory Archiving
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 border-0 shadow-sm" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,0,0.2) !important;">
+                <div class="card-header border-bottom text-light" style="background: rgba(255,255,0,0.05); border-color: rgba(255,255,0,0.2) !important;">
+                    <h5 class="mb-0" style="font-family: 'Space Grotesk', sans-serif;"><i class="fas fa-server text-warning"></i> DATACENTER</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <button class="btn btn-outline-warning" onclick="exportAllData()">
+                            <i class="fas fa-download"></i> Extract Full Node DB
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="clearAllData()">
+                            <i class="fas fa-radiation"></i> Execute Total Purge
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(16,185,129,0.2) !important;">
+                <div class="card-header border-bottom text-light" style="background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2) !important;">
+                    <h5 class="mb-0" style="font-family: 'Space Grotesk', sans-serif;"><i class="fas fa-terminal text-success"></i> ABOUT NEXUS</h5>
+                </div>
+                <div class="card-body text-light">
+                    <p><strong>OS Version:</strong> <span class="text-info">NEXUS v1.5 [Build 2026.03]</span></p>
+                    <p><strong>Primary Model:</strong> <span class="text-danger">LLaMA 3.3 70B (Groq Interface)</span></p>
+                    <p><strong>Capabilities:</strong></p>
+                    <ul class="text-muted">
+                        <li>Quantum Web Injections</li>
+                        <li>Persistent Neuro-Memory</li>
+                        <li>Biometric Audio Input</li>
+                        <li>Encrypted Vault Exports</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button class="btn btn-primary btn-lg" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> APPLY CHANGES
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Load saved settings
+document.addEventListener('DOMContentLoaded', function() {
+    const fontSize = localStorage.getItem('fontSize') || 16;
+    document.getElementById('font-size').value = fontSize;
+    document.getElementById('font-size-value').textContent = fontSize;
+    
+    const theme = localStorage.getItem('theme') || 'dark';
+    document.getElementById('theme-select').value = theme;
+    
+    const responseLength = localStorage.getItem('responseLength') || 'medium';
+    document.getElementById('response-length').value = responseLength;
+    
+    const webSearch = localStorage.getItem('webSearch') !== 'false';
+    document.getElementById('web-search').checked = webSearch;
+    
+    const autoSave = localStorage.getItem('autoSave') !== 'false';
+    document.getElementById('auto-save').checked = autoSave;
+});
+
+// Font size slider
+document.getElementById('font-size').addEventListener('input', function() {
+    document.getElementById('font-size-value').textContent = this.value;
+});
+
+function saveSettings() {
+    const fontSize = document.getElementById('font-size').value;
+    const theme = document.getElementById('theme-select').value;
+    const responseLength = document.getElementById('response-length').value;
+    const webSearch = document.getElementById('web-search').checked;
+    const autoSave = document.getElementById('auto-save').checked;
+    
+    localStorage.setItem('fontSize', fontSize);
+    localStorage.setItem('theme', theme);
+    localStorage.setItem('responseLength', responseLength);
+    localStorage.setItem('webSearch', webSearch);
+    localStorage.setItem('autoSave', autoSave);
+    
+    alert('SYSTEM UPDATED: Configuration synced to local storage.');
+}
+
+function exportAllData() {
+    fetch('/export-all')
+        .then(response => response.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `nexus_coredump_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+        });
+}
+
+function clearAllData() {
+    if (confirm('CRITICAL WARNING: This action will destroy all memories permanently. Proceed?')) {
+        fetch('/clear-history', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('PURGE COMPLETE: All structural nodes destroyed.');
+            window.location.href = '/';
+        });
+    }
+}
+</script>
+<style>
+    .custom-switch .form-check-input {
+        background-color: #343a40;
+        border-color: #00f0ff;
+    }
+    .custom-switch .form-check-input:checked {
+        background-color: #00f0ff;
+        border-color: #00f0ff;
+    }
+</style>
+{% endblock %}

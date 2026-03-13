@@ -1,0 +1,9 @@
+Flask==2.3.3
+python-dotenv==1.0.0
+requests==2.31.0
+transformers==4.36.0
+torch==2.1.0
+huggingface-hub==0.20.3
+flask-wtf==1.1.1
+email-validator==2.0.0
+duckduckgo-search==6.3.5
